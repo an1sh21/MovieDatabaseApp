@@ -17,18 +17,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.cw2.ui.theme.Cw2Theme
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Cw2Theme {
-                Surface(modifier = Modifier.fillMaxSize()) {
                     firstScreen()
-                }
             }
         }
     }
@@ -36,6 +39,7 @@ class MainActivity : ComponentActivity() {
 
 @Composable
 fun firstScreen() {
+    val context = LocalContext.current
     Scaffold { innerPadding ->
         Column(
             modifier = Modifier
@@ -52,11 +56,19 @@ fun firstScreen() {
             )
 
             Button(
-                modifier = Modifier,
-                onClick = { /* TODO: Navigate to add movies screen */ }
-            ) {
+                onClick = {
+                    CoroutineScope(Dispatchers.IO).launch {
+                        val db = AppDatabase.getDatabase(context)
+                        db.movieDao().insertAll(hardcodedMovies)
+                    }
+                },
+                modifier = Modifier.fillMaxWidth()
+            )
+            {
                 Text("Add Movies to DB")
             }
+
+
             Spacer(modifier = Modifier.padding(16.dp))
 
             Button(
