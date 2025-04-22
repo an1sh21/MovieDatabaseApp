@@ -6,12 +6,16 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.shape.CutCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
@@ -31,6 +35,7 @@ import com.example.cw2.ui.theme.Cw2Theme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.net.HttpURLConnection
 import java.net.URL
 
@@ -40,15 +45,21 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             Cw2Theme {
-                    firstScreen()
+                var currentScreen by remember { mutableStateOf("home") }
+                if (currentScreen == "home") {
+                    firstScreen(onNavigate = { currentScreen = "search" })
+                } else if (currentScreen == "search") {
+                    searchMoviesScreen()
+                }
             }
+
         }
     }
 }
 
 
 @Composable
-fun firstScreen() {
+fun firstScreen(onNavigate:() -> Unit) {
     val context = LocalContext.current
 
     Column(
@@ -76,11 +87,11 @@ fun firstScreen() {
         Spacer(modifier = Modifier.padding(16.dp))
 
         Button(onClick = {
-            CoroutineScope(Dispatchers.IO).launch {
-                val response = fetchMovieFromApi("The Matrix")
-                Log.d("API_RESPONSE",response)
+            onNavigate()
 
-            }
+
+
+
             // TODO: Navigate to Search for Movies screen
         }) {
             Text("Search for Movies")
@@ -125,15 +136,105 @@ fun parseMovieFromJson(jsonString: String): Movie{
 
 
 }
-
-
-
-
-
-@Preview(showBackground = true)
 @Composable
-fun FirstScreenPreview() {
-    Cw2Theme {
-        firstScreen()
+fun searchMoviesScreen() {
+    val context = LocalContext.current
+
+
+    var searchTitle by remember { mutableStateOf("") }
+    var movie by remember { mutableStateOf<Movie?>(null) }
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.SpaceEvenly
+    ) {
+
+        OutlinedTextField(
+            value = searchTitle,
+            onValueChange = { searchTitle = it },
+            label = { Text("Enter movie title") },
+        )
+
+
+        Button(onClick = {
+            CoroutineScope(Dispatchers.IO).launch {
+                val response = fetchMovieFromApi(searchTitle)
+                val parsed = parseMovieFromJson(response)
+
+
+                withContext(Dispatchers.Main) {
+                    movie = parsed
+                }
+            }
+        }) {
+            Text("Retrieve Movie")
+        }
+
+
+            movie?.let {
+                Card(
+                    modifier = Modifier
+                        .padding(16.dp),
+                    elevation = CardDefaults.cardElevation(4.dp)
+                ) {
+                    Column(modifier = Modifier,
+                        horizontalAlignment = Alignment.Start
+                    ){ Text("Title: ${it.title}")
+                        Text("Year: ${it.year}")
+                        Text("Rated: ${it.rated}")
+                        Text("Released: ${it.released}")
+                        Text("Runtime: ${it.runtime}")
+                        Text("Genre: ${it.genre}")
+                        Text("Director: ${it.director}")
+                        Text("Actors: ${it.actors}")
+                        Spacer(modifier = Modifier.padding(16.dp))
+                        Text("Plot: ${it.plot}") }
+
+
+                }
+
+            }
+
+
+
+
+
+
+        Button(onClick = {
+            movie?.let {
+                CoroutineScope(Dispatchers.IO).launch {
+                    val db = AppDatabase.getDatabase(context)
+                    db.movieDao().insertAllMovies(listOf(it))
+
+
+                }
+
+
+            }
+        }) {
+            Text("Save Movie to Database")
+        }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
