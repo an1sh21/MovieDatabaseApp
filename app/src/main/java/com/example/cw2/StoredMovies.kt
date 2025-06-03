@@ -1,5 +1,7 @@
 package com.example.cw2
 
+import com.example.cw2.model.Movie
+
 val hardcodedMovies = listOf(
     Movie(
         title = "The Shawshank Redemption",

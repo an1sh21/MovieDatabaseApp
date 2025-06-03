@@ -1,13 +1,14 @@
-package com.example.cw2
+package com.example.cw2.model
 
 import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
 
-@Database(entities = [Movie::class], version = 1)
+
+@Database(entities = [Movie::class], version = 2)
 abstract class AppDatabase : RoomDatabase(){
-    abstract fun movieDao():MovieDao
+    abstract fun movieDao(): MovieDao
 
 
     companion object {
@@ -21,7 +22,8 @@ abstract class AppDatabase : RoomDatabase(){
                     context.applicationContext,
                     AppDatabase::class.java,
                     "movies_db"
-                ).build()
+                ).fallbackToDestructiveMigration(true) // true = ALL tables will be dropped and recreated
+                    .build()
                 INSTANCE = instance
                 instance
             }
@@ -29,9 +31,3 @@ abstract class AppDatabase : RoomDatabase(){
     }
 
     }
-
-
-
-
-
-
