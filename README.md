@@ -47,9 +47,9 @@ The app helps users discover movies using the OMDb API and supports local data s
 | Home Screen                          | Add Movies                                | Search by Title                                  |
 | ------------------------------------ | ----------------------------------------- | ------------------------------------------------ |
 | ![Home Screen](![HOME](https://github.com/user-attachments/assets/01671674-fa77-4001-ad4d-a28d1592ae3c)
-) | ![Add Movies](https://github.com/user-attachments/assets/09c3fd56-3da4-40c5-9d68-e67b813331ba)
-) | ![Search by Title](https://github.com/user-attachments/assets/3ae3c580-c5a3-4d82-bf0a-b3f5e4e793cd)
-() |
+ | ![Add Movies](https://github.com/user-attachments/assets/09c3fd56-3da4-40c5-9d68-e67b813331ba)
+ | ![Search by Title](https://github.com/user-attachments/assets/3ae3c580-c5a3-4d82-bf0a-b3f5e4e793cd)
+ |
 
 | Movie Detail                                  | Search by Actor                               | 
 | --------------------------------------------- | --------------------------------------------- |
