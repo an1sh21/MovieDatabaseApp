@@ -50,7 +50,8 @@ The app helps users discover movies using the OMDb API and supports local data s
 
 | Movie Detail                                                                                     | Search by Actor                                                                                  | Title Substring Search                              |
 | ------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------ | --------------------------------------------------- |
-| ![Movie Detail](https://github.com/user-attachments/assets/69e8fe73-2441-4863-9b9c-591d6d604a66) | ![Search Actor](https://github.com/user-attachments/assets/9b1133c3-c190-456f-b420-9a5ad94522de) | ![Title Substring](screenshots/title_substring.png) |
+| ![Movie Detail](https://github.com/user-attachments/assets/69e8fe73-2441-4863-9b9c-591d6d604a66) | ![Search Actor](https://github.com/user-attachments/assets/9b1133c3-c190-456f-b420-9a5ad94522de) | ![Title Substring](https://github.com/user-attachments/assets/33544960-6d5b-4765-aa32-082f132c9fc4)
+) |
 
 ---
 
